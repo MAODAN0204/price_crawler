@@ -1,9 +1,19 @@
 // API 調用和前端交互邏輯
 class PriceComparison {
     constructor() {
-        this.apiUrl = 'http://localhost:8000';
+        // 嘗試自動檢測 API URL
+        this.apiUrl = this.detectApiUrl();
         this.products = [];
         this.init();
+    }
+
+    detectApiUrl() {
+        // 如果在本地環境，使用 localhost
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:8000';
+        }
+        // 如果在 GitHub Pages，需要用戶手動設定
+        return 'http://localhost:8000'; // 預設值
     }
 
     init() {
@@ -26,12 +36,19 @@ class PriceComparison {
     }
 
     async checkApiStatus() {
+        const statusBadge = document.getElementById('apiStatus');
         try {
             const response = await fetch(`${this.apiUrl}/health`);
             if (response.ok) {
+                statusBadge.textContent = '已連接';
+                statusBadge.className = 'badge bg-success ms-2';
                 this.showNotification('API 服務正常運行', 'success');
+            } else {
+                throw new Error('API 回應異常');
             }
         } catch (error) {
+            statusBadge.textContent = '未連接';
+            statusBadge.className = 'badge bg-danger ms-2';
             this.showNotification('無法連接到API服務，請確認後端是否啟動', 'warning');
         }
     }
@@ -293,7 +310,7 @@ function setSearchExample(productName) {
 }
 
 function openGitHub() {
-    // 嘗試檢測 GitHub 倉庫 URL
-    const repoUrl = 'https://github.com/user/price_crawler'; // 替換為實際的倉庫 URL
+    // GitHub 倉庫 URL
+    const repoUrl = 'https://github.com/MAODAN0204/price_crawler';
     window.open(repoUrl, '_blank');
 } 
