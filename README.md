@@ -136,6 +136,29 @@ curl "http://localhost:8000/api/search?product=RTX%204090&standalone_only=true"
 python run.py
 ```
 
+### 方式四：靜態網頁版本（GitHub Pages）
+如果您想部署靜態網頁版本到 GitHub Pages：
+
+1. **推送代碼到 GitHub**：
+```bash
+git add .
+git commit -m "Add GitHub Pages support"
+git push origin main
+```
+
+2. **啟用 GitHub Pages**：
+   - 進入 GitHub 倉庫設定頁面
+   - 找到 "Pages" 選項
+   - Source 選擇 "GitHub Actions"
+   - 系統會自動部署靜態網站
+
+3. **訪問網站**：
+```
+https://your-username.github.io/price_crawler/
+```
+
+**注意**: 靜態版本需要後端 API 服務運行在本地或遠端伺服器上。
+
 ## 📖 API 文件
 
 ### 🔍 搜尋產品

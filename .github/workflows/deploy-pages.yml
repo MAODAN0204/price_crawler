@@ -1,0 +1,160 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Build site
+      run: |
+        # 複製靜態文件到 _site 目錄
+        mkdir -p _site
+        cp -r docs/* _site/
+        
+        # 生成 API 文檔
+        echo "生成 API 文檔..."
+        cat > _site/api-docs.html << 'EOF'
+        <!DOCTYPE html>
+        <html lang="zh-TW">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>API 文檔 - 電腦產品比價系統</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet">
+        </head>
+        <body>
+            <div class="container my-5">
+                <h1>API 文檔</h1>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>基本資訊</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>基礎 URL:</strong> <code>http://localhost:8000</code></p>
+                        <p><strong>回應格式:</strong> JSON</p>
+                        <p><strong>支援的賣場:</strong> 原價屋, 德源電腦, AUTOBUY, 欣亞數位, PChome, 藍寶石, 順發電腦</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>搜尋 API</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><code>GET /api/search</code></p>
+                        <h5>參數:</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>參數名</th>
+                                    <th>類型</th>
+                                    <th>必需</th>
+                                    <th>說明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>product</td>
+                                    <td>string</td>
+                                    <td>是</td>
+                                    <td>產品名稱或型號</td>
+                                </tr>
+                                <tr>
+                                    <td>standalone_only</td>
+                                    <td>boolean</td>
+                                    <td>否</td>
+                                    <td>是否僅顯示單品</td>
+                                </tr>
+                                <tr>
+                                    <td>in_stock_only</td>
+                                    <td>boolean</td>
+                                    <td>否</td>
+                                    <td>是否僅顯示有庫存商品</td>
+                                </tr>
+                                <tr>
+                                    <td>min_price</td>
+                                    <td>integer</td>
+                                    <td>否</td>
+                                    <td>最低價格</td>
+                                </tr>
+                                <tr>
+                                    <td>max_price</td>
+                                    <td>integer</td>
+                                    <td>否</td>
+                                    <td>最高價格</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h5>範例請求:</h5>
+                        <pre><code class="language-bash">curl "http://localhost:8000/api/search?product=RTX4090&standalone_only=true"</code></pre>
+                        
+                        <h5>範例回應:</h5>
+                        <pre><code class="language-json">{
+  "success": true,
+  "message": "搜尋完成",
+  "data": {
+    "total_found": 42,
+    "successful_stores": ["原價屋", "德源電腦"],
+    "failed_stores": [],
+    "results": [
+      {
+        "product_name": "RTX 4090 Gaming X Trio",
+        "price": 65990,
+        "store": "原價屋",
+        "url": "https://...",
+        "in_stock": true,
+        "is_bundle": false
+      }
+    ]
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+        </body>
+        </html>
+        EOF
+
+        # 檢查文件是否正確生成
+        ls -la _site/
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4 

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電腦產品比價系統</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .container-main {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .store-badge {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--success-color);
+        }
+        
+        .stock-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .in-stock {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+        
+        .out-of-stock {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-card {
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .filter-section {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-search-dollar me-2"></i>
+                電腦產品比價系統
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#search">搜尋</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">功能特色</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#api">API文檔</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="openGitHub()">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="container-main">
+            <!-- 標題區域 -->
+            <div class="text-center mb-5">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-microchip text-primary me-3"></i>
+                    電腦產品比價系統
+                </h1>
+                <p class="lead">即時爬取台灣電腦產品價格，支援多個主流賣場，智能過濾組合商品</p>
+            </div>
+
+            <!-- 搜尋區域 -->
+            <div id="search" class="search-box">
+                <h3 class="mb-4">
+                    <i class="fas fa-search me-2"></i>
+                    搜尋商品
+                </h3>
+                
+                <form id="searchForm">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="productName" class="form-label">產品名稱或型號</label>
+                                <input type="text" class="form-control form-control-lg" id="productName" 
+                                       placeholder="例如: RTX 4090, i9-14900K, 32GB DDR5" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="apiUrl" class="form-label">API URL</label>
+                                <input type="url" class="form-control" id="apiUrl" 
+                                       value="http://localhost:8000" 
+                                       placeholder="http://localhost:8000">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h6><i class="fas fa-filter me-2"></i>篩選選項</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="standaloneOnly">
+                                    <label class="form-check-label" for="standaloneOnly">
+                                        <strong>僅顯示單品</strong> (過濾組合包商品)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="inStockOnly">
+                                    <label class="form-check-label" for="inStockOnly">
+                                        僅顯示有庫存商品
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="minPrice" class="form-label">最低價格</label>
+                                        <input type="number" class="form-control" id="minPrice" placeholder="0">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="maxPrice" class="form-label">最高價格</label>
+                                        <input type="number" class="form-control" id="maxPrice" placeholder="無限制">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-search me-2"></i>
+                            開始搜尋
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 統計資訊 -->
+            <div id="statsSection" class="row mb-4" style="display: none;">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <span id="totalProducts" class="stats-number">0</span>
+                        <span>找到商品</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <span id="successStores" class="stats-number">0</span>
+                        <span>成功賣場</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <span id="avgPrice" class="stats-number">0</span>
+                        <span>平均價格</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <span id="filterRate" class="stats-number">0%</span>
+                        <span>過濾率</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 載入中 -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <h5>正在搜尋多個賣場...</h5>
+                <p class="text-muted">這可能需要幾秒鐘時間</p>
+            </div>
+
+            <!-- 結果區域 -->
+            <div id="results" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4><i class="fas fa-list me-2"></i>搜尋結果</h4>
+                    <div>
+                        <select id="sortBy" class="form-select d-inline-block w-auto">
+                            <option value="price">價格排序</option>
+                            <option value="name">名稱排序</option>
+                            <option value="store">賣場排序</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="productList"></div>
+            </div>
+        </div>
+
+        <!-- 功能特色區域 -->
+        <div id="features" class="container-main mt-5">
+            <h2 class="text-center mb-5">
+                <i class="fas fa-star me-2"></i>
+                功能特色
+            </h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <i class="fas fa-bolt feature-icon"></i>
+                        <h5>即時爬取</h5>
+                        <p>實時獲取最新價格資訊，支援7個主流電腦賣場</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <i class="fas fa-filter feature-icon"></i>
+                        <h5>智能過濾</h5>
+                        <p>自動識別並過濾組合包商品，確保搜尋結果精確</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <i class="fas fa-tachometer-alt feature-icon"></i>
+                        <h5>高效能</h5>
+                        <p>並行處理多個網站，30分鐘智能快取機制</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API文檔區域 -->
+        <div id="api" class="container-main mt-5">
+            <h2 class="text-center mb-5">
+                <i class="fas fa-code me-2"></i>
+                API 使用指南
+            </h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>搜尋API</h5>
+                    <div class="bg-light p-3 rounded">
+                        <code>GET /api/search?product=RTX4090&standalone_only=true</code>
+                    </div>
+                    <h6 class="mt-3">參數說明：</h6>
+                    <ul>
+                        <li><code>product</code> - 產品名稱或型號（必需）</li>
+                        <li><code>standalone_only</code> - 是否僅顯示單品</li>
+                        <li><code>in_stock_only</code> - 僅顯示有庫存商品</li>
+                        <li><code>min_price</code> - 最低價格過濾</li>
+                        <li><code>max_price</code> - 最高價格過濾</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>支援的賣場</h5>
+                    <div class="list-group">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-check-circle text-success me-2"></i>原價屋</span>
+                            <span class="badge bg-success">正常</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-check-circle text-success me-2"></i>德源電腦</span>
+                            <span class="badge bg-success">正常</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-check-circle text-success me-2"></i>AUTOBUY</span>
+                            <span class="badge bg-success">正常</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-check-circle text-success me-2"></i>欣亞數位</span>
+                            <span class="badge bg-success">正常</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-check-circle text-success me-2"></i>PChome 24h</span>
+                            <span class="badge bg-success">正常</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 bg-dark text-white text-center">
+        <div class="container">
+            <p>&copy; 2025 電腦產品比價系統. 僅供學習和個人使用.</p>
+            <p>
+                <a href="https://github.com/your-username/price_crawler" class="text-white me-3">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="#" class="text-white">
+                    <i class="fas fa-book"></i> 說明文件
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
