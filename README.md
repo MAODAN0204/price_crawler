@@ -1,6 +1,6 @@
 # 電腦產品比價系統
 
-![系統界面截圖](screenshots/system-interface.png)
+![系統界面截圖](https://private-user-images.githubusercontent.com/102590964/461474627-c978f9e4-8eee-4198-b519-1c06501f1baf.jpg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTE0NTIwMjcsIm5iZiI6MTc1MTQ1MTcyNywicGF0aCI6Ii8xMDI1OTA5NjQvNDYxNDc0NjI3LWM5NzhmOWU0LThlZWUtNDE5OC1iNTE5LTFjMDY1MDFmMWJhZi5qcGc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNzAyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDcwMlQxMDIyMDdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05OGI5NTZhZDU1NDIxMzViOGMwZjNiNDJkYzZmZDZhYzMzMjJkYjI5NDQxYTE3ZDUwN2Q3MjdhOWZiN2E0N2U0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.JT5dCU6o0xd2HtUNgR8Ne1UC9AWEzdO3fdPO3UYqSwM)
 
 即時爬取台灣電腦產品價格的比價系統，支援多個主流電腦賣場，提供智能產品匹配與組合商品過濾功能。
 
@@ -389,24 +389,13 @@ API 日誌會即時顯示：
 
 ## 🔄 更新日誌
 
-### v2.0.0 (2025-01-02) - 最新版本
+### v1.0.0 (2025-07-02) - 最新版本
 - ✅ **新增7個賣場**: AUTOBUY、欣亞數位、藍寶石、順發、PChome等
 - ✅ **組合商品過濾**: 智能識別並過濾各種組合包商品
 - ✅ **產品模型升級**: 新增 `is_bundle` 欄位標記組合商品
 - ✅ **改善使用者介面**: 更新為「搜尋商品型號」提升用戶體驗
 - ✅ **錯誤處理優化**: 更完善的異常處理與錯誤訊息
 - ✅ **效能提升**: 優化爬取邏輯，提升回應速度
-
-### v1.5.0 (2024-12-15)
-- ✅ **原價屋爬蟲修復**: 解決JavaScript渲染問題，支援最新產品
-- ✅ **快取機制優化**: 提升快取效率，減少重複請求
-- ✅ **產品匹配改進**: 更精確的相似度計算演算法
-
-### v1.0.0 (2024-01-01)
-- ✅ **基礎架構建立**: FastAPI + Streamlit 架構
-- ✅ **原價屋爬蟲**: 第一個爬蟲實作
-- ✅ **德源電腦爬蟲**: 第二個賣場支援
-- ✅ **產品匹配邏輯**: 基礎相似度匹配
 
 ## 📄 授權條款
 
